@@ -35,8 +35,6 @@ function legalMove(array){
 function isValid(item){
     return item >= 0 && item <= 7
 };
-    
-
 //adjecent list graph  to create knight move  board
 function Graph(){
     //store all vertices in array 
@@ -124,11 +122,8 @@ function Graph(){
     }
 };
 
-
-
 let knightBoard = Graph();
 let board= [
-
     [ [0, 7], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7] ],
     [ [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6] ],
     [ [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5] ],
@@ -137,16 +132,14 @@ let board= [
     [ [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2] ],
     [ [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1] ],
     [ [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0] ],
-   
 ];
-
+//add vertices from the 2d array
 for(let row = 0; row < board.length; row++){
     for(let col = 0; col < board[row].length;col++){
-   
-        knightBoard.addVertex(board[row][col].toString())
+        knightBoard.addVertex(board[row][col].toString());
     }
 };
-
+//add edge with the legal move 
 for(let i = 0; i < board.length; i++){
     for(let j = 0; j < board[i].length; j++){
         let moves = legalMove(board[i][j]);
@@ -156,10 +149,27 @@ for(let i = 0; i < board.length; i++){
         }
     }
 };
+//function that accept 2 coordinate as an array return shortest path and the distance between them
+function knightMove(start, destination){
+   if(start.length !== 2 || destination.length !== 2){
+     throw new Error( "enter proper coordinate as an arry [0,0]");
+   }
+   if(start.every(isValid) === false || destination.every(isValid) === false){
+    throw new Error ("coordinate is out of the board [x,y] x and y should be between 1-8")
+   } 
+   let coordinateStart = start.toString();
+   let coordinateDestination = destination.toString();
+   const result = knightBoard.bfsShortesPath(coordinateStart, coordinateDestination);
+   console.log(`You made it in ${result.distance} moves! Here's your path` );
+   for(let i = 0; i < result.path.length; i++){
+    console.log(`[${result.path[i]}]`)
+   }
+   console.log('Shortest path:', result.path.join(' -> '));
+};
 
-const result = knightBoard.bfsShortesPath('0,0', '6,2');
-console.log('Shortest distance:', result.distance);
-console.log('Shortest path:', result.path.join(' -> '));
+export { knightMove}
+
+
 
 
 
